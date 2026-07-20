@@ -7,6 +7,8 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>fr.diginamic.Region</class>
         <class>fr.diginamic.Livre</class>
+        <class>fr.diginamic.Client</class>
+        <class>fr.diginamic.Emprunt</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/jpa"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>

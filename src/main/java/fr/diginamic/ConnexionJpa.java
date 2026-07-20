@@ -12,7 +12,7 @@ public class ConnexionJpa {
         EntityManager em = entityManagerFactory.createEntityManager();
 
         // Appel du/des TP(s) à exécuter
-        tp3LivreTypedQuery(em);
+        tp4FindClientById(em, 1);
 
         em.close();
         entityManagerFactory.close();
@@ -59,4 +59,18 @@ public class ConnexionJpa {
             System.out.println(l.getId() + " - " + l.getTitre() + ", " + l.getAuteur());
         }
     }
+
+    /**
+     * TP4 - Annotations relationnelles
+     */
+    private static void tp4FindClientById(EntityManager em, int id) {
+        Client client = em.find(Client.class, id);
+        if (client != null) {
+            System.out.println(client.getNom() + " " + client.getPrenom());
+            for (Emprunt e : client.getEmprunts()) {
+                System.out.println("  - Emprunt #" + e.getId() + " du " + e.getDateDebut());
+            }
+        }
+    }
+
 }
