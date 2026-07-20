@@ -3,6 +3,9 @@ package fr.diginamic;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "EMPRUNT")
 @Getter
@@ -18,7 +21,14 @@ public class Emprunt {
     private Integer delai;
 
     @ManyToOne
-    @JoinColumn(name="ID_CLIENT")
+    @JoinColumn(name = "ID_CLIENT")
     private Client client;
+
+    @ManyToMany
+    @JoinTable(name = "COMPO",
+            joinColumns = @JoinColumn(name = "ID_EMP", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "ID_LIV", referencedColumnName = "ID")
+    )
+    private List<Livre> livres = new ArrayList<>();
 
 }

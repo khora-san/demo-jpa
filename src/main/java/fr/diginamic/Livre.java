@@ -3,6 +3,9 @@ package fr.diginamic;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Livre")
 @Getter
@@ -14,4 +17,7 @@ public class Livre {
     private String titre;
     @Column(name = "AUTEUR")
     private String auteur;
+
+    @ManyToMany(mappedBy = "livres")
+    private List<Emprunt> emprunts = new ArrayList<>();
 }

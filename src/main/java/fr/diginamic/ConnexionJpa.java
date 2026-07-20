@@ -12,7 +12,7 @@ public class ConnexionJpa {
         EntityManager em = entityManagerFactory.createEntityManager();
 
         // Appel du/des TP(s) à exécuter
-        tp4FindClientById(em, 1);
+        tp4FindEmpruntsByClient(em, 1);
 
         em.close();
         entityManagerFactory.close();
@@ -61,7 +61,7 @@ public class ConnexionJpa {
     }
 
     /**
-     * TP4 - Annotations relationnelles
+     * TP4-1 - Annotations relationnelles
      */
     private static void tp4FindClientById(EntityManager em, int id) {
         Client client = em.find(Client.class, id);
@@ -73,4 +73,31 @@ public class ConnexionJpa {
         }
     }
 
+    /**
+     * TP4-2 - Annotations relationnelles
+     */
+    private static void tp4FindEmpruntById(EntityManager em, int id) {
+        Emprunt emprunt = em.find(Emprunt.class, id);
+        if (emprunt != null) {
+            System.out.println("Emprunt #" + emprunt.getId() + " " + emprunt.getDateDebut());
+            for (Livre l : emprunt.getLivres()) {
+                System.out.println("  - Livre #" + l.getId() + " " + l.getTitre() + ", " + l.getAuteur());
+            }
+        }
+    }
+
+    private static void tp4FindEmpruntsByClient(EntityManager em, int id) {
+        Client client = em.find(Client.class, id);
+        if (client != null) {
+            System.out.println(client.getNom() + " " + client.getPrenom());
+            for (Emprunt e : client.getEmprunts()) {
+                System.out.println("  -- Emprunt #" + e.getId() + " du " + e.getDateDebut());
+                for (Livre l : e.getLivres()) {
+                    System.out.println("    - Livre #" + l.getId() + " " + l.getTitre() + ", " + l.getAuteur());
+                }
+            }
+        }
+    }
 }
+
+
