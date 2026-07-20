@@ -12,7 +12,9 @@ public class ConnexionJpa {
         EntityManager em = entityManagerFactory.createEntityManager();
 
         // Appel du/des TP(s) à exécuter
-        tp4FindEmpruntsByClient(em, 1);
+        //tp4FindEmpruntsByClient(em, 1);
+
+        testDesyncManyToMany(em);
 
         em.close();
         entityManagerFactory.close();
@@ -97,6 +99,28 @@ public class ConnexionJpa {
                 }
             }
         }
+    }
+    // méthode pour tester les limites du double @JoinTable (= pas de mappedBy)
+    // résultat : suppression OK côté base, mais incohérence côté mémoire java = desynchronisation !
+    // mais a priori même problème avec le mappedBy --> solution: méthodes utilitaires
+    private static void testDesyncManyToMany(EntityManager em) {
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+
+        Emprunt emprunt2 = em.find(Emprunt.class, 2);
+        Livre livre3 = em.find(Livre.class, 3);
+
+        // On force le chargement des deux collections AVANT modification
+        System.out.println("Avant - livre3 contient emprunt2 ? " + livre3.getEmprunts().contains(emprunt2));
+
+        // On supprime la relation UNIQUEMENT via le côté Emprunt
+        emprunt2.getLivres().remove(livre3);
+
+        // On NE touche PAS livre3.getEmprunts()
+        System.out.println("Après modif Emprunt - livre3 contient encore emprunt2 en mémoire ? "
+                + livre3.getEmprunts().contains(emprunt2));
+
+        tx.commit();
     }
 }
 
